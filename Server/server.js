@@ -36,6 +36,30 @@ let movies = [
     res.json(movie);
  });
 
+ app.put('/movies/:id', (req, res) => {
+    const id = req.params.id;
+    const movieIndex = movies.findIndex(movie => movie.id === id)
+    if (movieIndex >= 0) {
+        const updatedMovie = {...movies[movieIndex], ...req.body};
+        movies[movieIndex] = updatedMovie;
+        res.json(updatedMovie);
+    } else {
+        res.status(404).send('Movie not found');
+    }
+});
+
+app.delete('/movies/:id', (req, res) => {
+    const id = req.params.id;
+    const movieIndex = movies.findIndex(movie => movie.id === id)
+    if (movieIndex >= 0) {
+        movies.splice(movieIndex, 1);
+        res.sendStatus(204);
+    } else {
+        res.status(404).send('Movie not found');
+    }
+});
+ 
+
  const PORT = 3001;
  app.listen(PORT, () => {
     console.info(`Server running on port ${PORT}`);
